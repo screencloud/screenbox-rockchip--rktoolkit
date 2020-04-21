@@ -425,7 +425,7 @@ int main(int argc, char **argv)
 		pr_type = VENDOR_PR_HEX;
 	}
 
-	if (!vendor_hex) {
+	if (!vendor_hex && (flag_rw & OPTION_FLAG_W)) {
 		ERROR("No input\n");
 		goto error;
 	}
