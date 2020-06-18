@@ -18,6 +18,10 @@
 #define VENDOR_IMEI_ID				15
 #define VENDOR_CUSTOM_ID			16
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * vendor_id: VENDOR_SN_ID ... VENDOR_CUSTOM_ID, 1 ... 16
  * return: 0 SUCCESS
@@ -28,8 +32,12 @@ int rkvendor_read(int vendor_id, char *data, int size);
  * vendor_id: VENDOR_SN_ID ... VENDOR_CUSTOM_ID, 1 ... 16
  * return: 0 SUCCESS
  */
-int rkvendor_write(int vendor_id, const unsigned char *data, int data_size);
+int rkvendor_write(int vendor_id, const char *data, int size);
 
-#define VENDOR_READ(VENDOR_ID, DATA) rkvendor_read(VENDOR_ID, DATA, sizeof(DATA)/sizeof(DATA[0]))
-#define VENDOR_WRITE(VENDOR_ID, DATA) rkvendor_write(VENDOR_ID, DATA, sizeof(DATA)/sizeof(DATA[0]))
+#ifdef __cplusplus
+}
+#endif
+
+#define VENDOR_READ(VENDOR_ID, DATA) rkvendor_read(VENDOR_ID, DATA, sizeof(DATA) / sizeof(DATA[0]))
+#define VENDOR_WRITE(VENDOR_ID, DATA) rkvendor_write(VENDOR_ID, DATA, sizeof(DATA) / sizeof(DATA[0]))
 #endif   /* _H_VENDOR_STORAGE_INC */

@@ -496,13 +496,13 @@ int rkvendor_read(int vendor_id, char *data, int size)
 	return 0;
 }
 
-int rkvendor_write(int vendor_id, const unsigned char *data, int data_size)
+int rkvendor_write(int vendor_id, const char *data, int size)
 {
 	int ret ;
 	uint8 p_buf[sizeof(struct rk_vendor_req)]; /* malloc req buffer or used extern buffer */
 	struct rk_vendor_req *req;
 
-	if (data_size > VENDOR_MAX_SIZE) {
+	if (size > VENDOR_MAX_SIZE) {
 		fprintf(stderr, "vendor storage input data overflow\n");
 		return -1;
 	}
@@ -517,7 +517,7 @@ int rkvendor_write(int vendor_id, const unsigned char *data, int data_size)
 	req->tag = VENDOR_REQ_TAG;
 	req->id = vendor_id;
 
-	req->len = data_size;
+	req->len = size;
 	memcpy(req->data, data, req->len);
 
 	ret = ioctl(sys_fd, VENDOR_WRITE_IO, req);
