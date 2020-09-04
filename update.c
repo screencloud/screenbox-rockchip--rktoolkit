@@ -33,6 +33,7 @@
 #include "update_recv/update_recv.h"
 
 #define LOG_FILE_LEN 512
+
 #if 0
 #define RECOVERY_PATH "/tmp/recovery"
 #define LOG_FILE_PATH "/tmp/recovery/log"
@@ -42,6 +43,7 @@
 #define LOG_FILE_PATH "/userdata/recovery/log"
 #define COMMAND_FILE_PATH "/userdata/recovery/command"
 #endif
+
 #define SD_UPDATE_FILE "/sdcard/update.img"
 #define DATA_UPDATE_FILE "/userdata/update.img"
 #define MISC_FILE_PATH "/dev/block/by-name/misc"
@@ -178,7 +180,7 @@ static void installPackage(char *update_file){
 	strcpy(arg, str_update_package);
 	strcpy(arg + str_update_package_len, update_file);
 	arg[str_update_package_len + str_update_file_len] = 0;
-		bootCommand(arg);
+	bootCommand(arg);
 }
 
 static void sdUpdate(){
@@ -201,7 +203,7 @@ static void dataUpdate(){
  */
 void rebootWipeUserData(){
 	printf("update: --wipe_all\n");
-		bootCommand("--wipe_all");
+	bootCommand("--wipe_all");
 }
 
 int rebootUpdate(char *path){
@@ -250,9 +252,14 @@ int main(int argc, char** argv){
 				int ret;
 				ret = WriteFwData(argv[2], partition_name);
 				if (ret < 0) {
-					printf(" Update partition %s fail \n", partition_name);
-					//means no find recovery partition in update.img
-					//return -1;
+					if (ret == -1) {
+						printf(" Update partition %s fail \n", partition_name);
+						//means no find recovery partition in update.img
+						//return -1;
+					} else if (ret == -2) {
+						printf("Some errors happen, update process break...\n");
+						return -1;
+					}
 				} else {
 					if (!CheckFwData(argv[2], partition_name)){
 						printf(" Check partition %s fail \n", partition_name);

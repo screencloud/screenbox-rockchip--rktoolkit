@@ -153,12 +153,12 @@ int WriteFwData(char* imgPath, char* fwName)
 	fwSize = GetFwSize(imgPath);
 	if (fwSize < 0) {
 		printf("GetFwSize %s Error\n", imgPath);
-		return -1;
+		return -2;
 	}
 
 	if (mnt_point[0] == 0) {
 		printf("### Error : Not find update.img ### \n");
-		return -1;
+		return -2;
 	}
 
 	pImgFile = fopen(mnt_point, "rb");
@@ -166,13 +166,13 @@ int WriteFwData(char* imgPath, char* fwName)
 	{
 		printf("%s<%d> Open %s failed! Error:%s\n", __func__, __LINE__,
 			   mnt_point, strerror(errno));
-		return -1;
+		return -2;
 	}
 
 	m_fwOffset = GetFwOffset(pImgFile);
 	if (bCheck == false && m_fwOffset < 0) {
 		printf("GetFwOffset %s Error\n", imgPath);
-		return -1;
+		return -2;
 	}
 	printf("m_fwOffset = 0x%08x \n", m_fwOffset);
 
@@ -182,13 +182,13 @@ int WriteFwData(char* imgPath, char* fwName)
 	if ( !bRet )
 	{
 		printf("### GetData error ###\n");
-		return -1;
+		return -2;
 	}
 
 	if (rkImageHead.item_count <= 0)
 	{
 		printf("### ERROR:DownloadImage-->No Found item ###\n");
-		return -1;
+		return -2;
 	}
 
 	for (idx = 0; idx < rkImageHead.item_count; idx++) {
@@ -199,7 +199,7 @@ int WriteFwData(char* imgPath, char* fwName)
 	}
 
 	if (idx == rkImageHead.item_count) {
-		printf("## Not found %s in update.img ##\n",fwName);
+		printf("## Not found %s in update.img ##\n", fwName);
 		goto ERR;
 	}
 
